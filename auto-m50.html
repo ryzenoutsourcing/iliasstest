@@ -124,11 +124,13 @@
             min-width: 200px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             padding-top: 10px;
+            z-index: 5000;
         }
 
         .dropdown-content li a {
             padding: 12px 16px;
             display: block;
+            pointer-events: auto; /* Ensure clicks pass through */
         }
 
         .dropdown:hover .dropdown-content, .dropdown.open .dropdown-content {
@@ -312,7 +314,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
             z-index: 2;
             border-radius: 10px;
         }
@@ -640,7 +642,7 @@
         </nav>
     </header>
 
-    <section class="hero">
+    <section id="home" class="hero">
         <div class="hero-content">
             <h1>Carrosserie Auto M50: Onzichtbaar Schadeherstel met de 'M-Serie' Standaard in Brussel.</h1>
             <p>Van kleine krasjes (Smart Repair) tot zwaar chassis-herstel. Wij regelen alles met uw verzekering. Uw wagen terug in showroomstaat, gegarandeerd.</p>
@@ -735,10 +737,10 @@
     </section>
 
     <section id="takeldienst" class="takeldienst">
-        <h3>24/7 Takeldienst Brussel – Binnen 30 min ter plaatse in Laken, Jette, Schaarbeek & Centrum.</h3>
-        <p>24/7 Depannage - Snelle Interventie in heel de regio Brussel!</p>
-        <p>Autopech of ongeval? Wij staan direct voor u klaar.</p>
-        <a href="tel:+32486789012" class="btn btn-white">BEL NU: +32 486 78 90 12</a>
+        <h2>24/7 Takeldienst Brussel</h2>
+        <p>Binnen 30 min ter plaatse in Laken, Jette, Schaarbeek & Centrum.</p>
+        <p>Autopech of ongeval? Wij staan direct voor u klaar voor snelle interventie in heel de regio Brussel!</p>
+        <a href="tel:023247742" class="btn btn-white">BEL NU: 02 324 77 42</a>
     </section>
 
     <section id="contact" class="contact-section">
@@ -765,6 +767,7 @@
                 <div style="margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px;">
                     <p><strong>Auto M50</strong></p>
                     <p>Chau. d'Anvers 393, 1000 Bruxelles</p>
+                    <p>Tel: <a href="tel:023247742" style="color: inherit;">02 324 77 42</a></p>
                     <p>BTW: BE 0849.826.403</p>
                 </div>
             </div>
@@ -817,6 +820,7 @@
                 <h3>Contact</h3>
                 <p>Chau. d'Anvers 393</p>
                 <p>1000 Bruxelles</p>
+                <p>Tel: <a href="tel:023247742" style="color: inherit;">02 324 77 42</a></p>
                 <p>BE 0849.826.403</p>
             </div>
         </div>
@@ -848,22 +852,29 @@
         if (dienstenDropdown) {
             dienstenDropdown.addEventListener('click', (e) => {
                 if (window.innerWidth <= 768) {
-                    e.stopPropagation();
-                    dienstenDropdown.classList.toggle('open');
+                    // Only toggle if the click is on the parent link itself
+                    if (e.target.classList.contains('dropdown-toggle')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        dienstenDropdown.classList.toggle('open');
+                    }
                 }
             });
         }
 
         // Close menu when clicking a link
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                if (dienstenDropdown) dienstenDropdown.classList.remove('open');
+            link.addEventListener('click', (e) => {
+                // If it's a sublink, we definitely want to close everything
+                if (!link.classList.contains('dropdown-toggle')) {
+                    navLinks.classList.remove('active');
+                    if (dienstenDropdown) dienstenDropdown.classList.remove('open');
+                }
             });
         });
 
         // ACTIVE LINK HIGHLIGHTER (Intersection Observer)
-        const sections = document.querySelectorAll('section, .flip-matrix');
+        const observerSections = document.querySelectorAll('section[id]');
         const navItems = document.querySelectorAll('.nav-item');
 
         const observerOptions = {
@@ -874,10 +885,11 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id') || "";
+                    const id = entry.target.getAttribute('id');
                     navItems.forEach(item => {
                         item.classList.remove('active');
-                        if (item.getAttribute('href') === `#${id}` || (id === "" && item.getAttribute('href') === "#")) {
+                        const href = item.getAttribute('href');
+                        if (href === `#${id}` || (id === "home" && href === "#")) {
                             item.classList.add('active');
                         }
                     });
@@ -885,7 +897,7 @@
             });
         }, observerOptions);
 
-        sections.forEach(section => observer.observe(section));
+        observerSections.forEach(section => observer.observe(section));
 
         // FORM VALIDATION LOGIC
         const contactForm = document.getElementById('contact-form');
@@ -896,6 +908,10 @@
                 .match(
                     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 );
+        };
+
+        const validatePhone = (phone) => {
+            return /^[\d\s\+\-\(\)]{6,20}$/.test(phone);
         };
 
         if (contactForm) {
@@ -922,6 +938,8 @@
                         fieldValid = false;
                     } else if (input.type === 'email' && !validateEmail(value)) {
                         fieldValid = false;
+                    } else if (input.id === 'mobiel' && !validatePhone(value)) {
+                        fieldValid = false;
                     }
 
                     if (!fieldValid) {
@@ -943,53 +961,77 @@
          * INFINITE PHOTO SLIDER LOGIC
          */
         const track = document.getElementById('sliderTrack');
-        let slides = Array.from(track.children);
-        const originalCount = slides.length;
+        if (track) {
+            let slides = Array.from(track.children);
+            const originalCount = slides.length;
 
-        // Clone for infinite loop
-        slides.forEach(slide => {
-            const clone = slide.cloneNode(true);
-            track.appendChild(clone);
-        });
+            // Clone for infinite loop
+            slides.forEach(slide => {
+                const clone = slide.cloneNode(true);
+                track.appendChild(clone);
+            });
 
-        let scrollAmount = 0;
-        const speedPerSecond = 50; // Pixels per second
-        let lastTimestamp = 0;
-        let isVisible = true;
+            let scrollAmount = 0;
+            const speedPerSecond = 50; // Pixels per second
+            let lastTimestamp = 0;
+            let animationFrameId = null;
 
-        function updateSlider(timestamp) {
-            if (!lastTimestamp) lastTimestamp = timestamp;
-            const delta = (timestamp - lastTimestamp) / 1000;
-            lastTimestamp = timestamp;
+            function updateSlider(timestamp) {
+                if (!lastTimestamp) lastTimestamp = timestamp;
+                const delta = (timestamp - lastTimestamp) / 1000;
+                lastTimestamp = timestamp;
 
-            if (isVisible && track) {
                 scrollAmount -= speedPerSecond * delta;
 
                 const gap = 20;
-                const firstSlideWidth = slides[0].offsetWidth + gap;
+                const firstSlide = track.querySelector('.slide');
+                const firstSlideWidth = (firstSlide ? firstSlide.offsetWidth : 0) + gap;
                 const totalOriginalWidth = firstSlideWidth * originalCount;
 
-                if (Math.abs(scrollAmount) >= totalOriginalWidth) {
+                if (totalOriginalWidth > 0 && Math.abs(scrollAmount) >= totalOriginalWidth) {
                     scrollAmount += totalOriginalWidth;
                 }
 
                 track.style.transform = `translateX(${scrollAmount}px)`;
+                animationFrameId = requestAnimationFrame(updateSlider);
             }
-            requestAnimationFrame(updateSlider);
+
+            function startSlider() {
+                if (!animationFrameId) {
+                    lastTimestamp = 0;
+                    animationFrameId = requestAnimationFrame(updateSlider);
+                }
+            }
+
+            function stopSlider() {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+            }
+
+            // Visibility API
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopSlider();
+                } else {
+                    startSlider();
+                }
+            });
+
+            // Resize handling
+            window.addEventListener('resize', () => {
+                const gap = 20;
+                const firstSlide = track.querySelector('.slide');
+                const firstSlideWidth = (firstSlide ? firstSlide.offsetWidth : 0) + gap;
+                const totalOriginalWidth = firstSlideWidth * originalCount;
+                if (totalOriginalWidth > 0 && Math.abs(scrollAmount) >= totalOriginalWidth) {
+                    scrollAmount = 0;
+                }
+            });
+
+            startSlider();
         }
-
-        // Visibility API
-        document.addEventListener('visibilitychange', () => {
-            isVisible = !document.hidden;
-            if (isVisible) lastTimestamp = 0; // Reset timestamp to avoid jump
-        });
-
-        // Resize handling
-        window.addEventListener('resize', () => {
-            // Recalculate if needed, but the loop reset logic handles dynamic widths in step
-        });
-
-        requestAnimationFrame(updateSlider);
     </script>
 
 </body>
