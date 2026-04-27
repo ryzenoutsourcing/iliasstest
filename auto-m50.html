@@ -43,6 +43,11 @@
             color: inherit;
         }
 
+        a:focus, button:focus, input:focus, textarea:focus, .flip-card:focus {
+            outline: 2px solid var(--accent-red);
+            outline-offset: 4px;
+        }
+
         ul {
             list-style: none;
         }
@@ -254,6 +259,7 @@
         .flip-card {
             perspective: 1000px;
             height: 300px;
+            cursor: pointer;
         }
 
         .flip-card-inner {
@@ -265,7 +271,7 @@
             transform-style: preserve-3d;
         }
 
-        .flip-card:hover .flip-card-inner {
+        .flip-card:hover .flip-card-inner, .flip-card.flipped .flip-card-inner {
             transform: rotateY(180deg);
         }
 
@@ -305,6 +311,7 @@
             left: 0;
             z-index: 1;
             border-radius: 10px;
+            background-color: #ddd; /* Fallback */
         }
 
         .flip-card-front::after {
@@ -388,6 +395,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            background-color: #ddd; /* Fallback */
         }
 
         .badge {
@@ -584,6 +592,37 @@
             color: var(--accent-red);
         }
 
+        /* CONTACT INFO STYLES */
+        .contact-info-header {
+            color: var(--accent-red);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .contact-info-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .whatsapp-quote-box h4 {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .whatsapp-quote-box p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .business-details {
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
         /* FOOTER */
         footer {
             background-color: var(--primary-grey);
@@ -668,7 +707,7 @@
     </section>
 
     <div id="diensten" class="flip-matrix">
-        <div class="flip-card" id="carrosserie">
+        <div class="flip-card" id="carrosserie" tabindex="0">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
                     <img src="https://images.pexels.com/photos/110844/pexels-photo-110844.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Carrosserieherstel Brussel" loading="lazy">
@@ -679,7 +718,7 @@
                 </div>
             </div>
         </div>
-        <div class="flip-card" id="smartrepair">
+        <div class="flip-card" id="smartrepair" tabindex="0">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
                     <img src="https://images.pexels.com/photos/3089071/pexels-photo-3089071.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Smart Repair Brussel" loading="lazy">
@@ -690,7 +729,7 @@
                 </div>
             </div>
         </div>
-        <div class="flip-card" id="spuitwerk">
+        <div class="flip-card" id="spuitwerk" tabindex="0">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
                     <img src="https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Professioneel spuitwerk Brussel" loading="lazy">
@@ -701,7 +740,7 @@
                 </div>
             </div>
         </div>
-        <div class="flip-card" id="verzekering">
+        <div class="flip-card" id="verzekering" tabindex="0">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
                     <img src="https://images.pexels.com/photos/7567192/pexels-photo-7567192.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Verzekeringsservice schade Brussel" loading="lazy">
@@ -751,16 +790,16 @@
     <section id="contact" class="contact-section">
         <div class="contact-container">
             <div class="contact-info">
-                <h2 style="color: var(--accent-red); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Contact & Offerte</h2>
-                <h3 style="font-size: 2.5rem; margin-bottom: 20px; line-height: 1.2;">Snel een prijs weten?</h3>
+                <h2 class="contact-info-header">Contact & Offerte</h2>
+                <h3 class="contact-info-title">Snel een prijs weten?</h3>
                 <p>Geen tijd om langs te komen? <br>
                 <strong>Stuur ons simpelweg foto's van de schade via WhatsApp en ontvang direct een vrijblijvende offerte op maat.</strong></p>
 
                 <a href="https://wa.me/32486789012" class="whatsapp-quote-box">
                     <i class="fab fa-whatsapp"></i>
                     <div>
-                        <h4 style="font-weight: bold; font-size: 1.1rem;">Direct Offerte via WhatsApp</h4>
-                        <p style="font-size: 0.85rem; opacity: 0.8;">Stuur foto's naar +32 486 78 90 12</p>
+                        <h4>Direct Offerte via WhatsApp</h4>
+                        <p>Stuur foto's naar +32 486 78 90 12</p>
                     </div>
                 </a>
 
@@ -769,33 +808,33 @@
                     <span>Scherpste tarieven voor Premium Vakmanschap</span>
                 </div>
 
-                <div style="margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px;">
+                <div class="business-details">
                     <p><strong>Auto M50</strong></p>
                     <p>Chau. d'Anvers 393, 1000 Bruxelles</p>
-                    <p>Tel: <a href="tel:023247742" style="color: inherit;">02 324 77 42</a></p>
+                    <p>Tel: <a href="tel:023247742">02 324 77 42</a></p>
                     <p>BTW: BE 0849.826.403</p>
                 </div>
             </div>
-            <form class="contact-form" id="contact-form" novalidate>
+            <form class="contact-form" id="contact-form" novalidate action="https://formspree.io/f/placeholder" method="POST">
                 <div class="form-group">
-                    <label>Naam</label>
-                    <input type="text" id="naam" placeholder="Uw naam">
+                    <label for="naam">Naam</label>
+                    <input type="text" id="naam" name="naam" placeholder="Uw naam" required>
                 </div>
                 <div class="form-group">
-                    <label>Achternaam</label>
-                    <input type="text" id="achternaam" placeholder="Uw achternaam">
+                    <label for="achternaam">Achternaam</label>
+                    <input type="text" id="achternaam" name="achternaam" placeholder="Uw achternaam" required>
                 </div>
                 <div class="form-group">
-                    <label>Mobiel</label>
-                    <input type="tel" id="mobiel" placeholder="Uw telefoonnummer">
+                    <label for="mobiel">Mobiel</label>
+                    <input type="tel" id="mobiel" name="mobiel" placeholder="Uw telefoonnummer" required>
                 </div>
                 <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" id="email" placeholder="Uw e-mailadres">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="Uw e-mailadres" required>
                 </div>
                 <div class="form-group">
-                    <label>Bericht</label>
-                    <textarea id="bericht" rows="5" placeholder="Beschrijf uw vraag of de schade..."></textarea>
+                    <label for="bericht">Bericht</label>
+                    <textarea id="bericht" name="bericht" rows="5" placeholder="Beschrijf uw vraag of de schade..." required></textarea>
                 </div>
                 <button type="submit" class="btn">VERZEND AANVRAAG</button>
             </form>
@@ -850,6 +889,7 @@
         if (closeMenu) {
             closeMenu.addEventListener('click', () => {
                 navLinks.classList.remove('active');
+                if (dienstenDropdown) dienstenDropdown.classList.remove('open');
             });
         }
 
@@ -874,6 +914,18 @@
                 if (!link.classList.contains('dropdown-toggle')) {
                     navLinks.classList.remove('active');
                     if (dienstenDropdown) dienstenDropdown.classList.remove('open');
+                }
+            });
+        });
+
+        // Flipcard Keyboard/Click Logic
+        document.querySelectorAll('.flip-card').forEach(card => {
+            const toggleFlip = () => card.classList.toggle('flipped');
+            card.addEventListener('click', toggleFlip);
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleFlip();
                 }
             });
         });
@@ -1015,12 +1067,27 @@
                 }
             }
 
-            // Visibility API
+            // Performance: Stop when not visible (Intersection + Visibility)
+            const sliderObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !document.hidden) {
+                        startSlider();
+                    } else {
+                        stopSlider();
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sliderObserver.observe(track.parentElement.parentElement);
+
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
                     stopSlider();
                 } else {
-                    startSlider();
+                    // Start only if it's in the viewport
+                    const rect = track.getBoundingClientRect();
+                    const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+                    if (inViewport) startSlider();
                 }
             });
 
