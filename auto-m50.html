@@ -361,6 +361,24 @@
             object-fit: cover;
         }
 
+        .slide {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-red);
+            color: var(--text-white);
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 3px;
+            z-index: 5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
         @media (max-width: 992px) {
             .slide {
                 flex: 0 0 calc(50% - 15px);
@@ -570,11 +588,11 @@
         <div class="flip-card" id="smartrepair">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
-                    <img src="https://images.unsplash.com/photo-1589739102247-28ca3183756d?auto=format&fit=crop&q=80&w=400" alt="Smart Repair Brussel" loading="lazy">
-                    <h3>Smart Repair</h3>
+                    <img src="https://images.unsplash.com/photo-1635773054018-209224016149?auto=format&fit=crop&q=80&w=400" alt="Smart Repair Brussel" loading="lazy">
+                    <h3>Gespecialiseerd Vleugel & Spatbord Herstel</h3>
                 </div>
                 <div class="flip-card-back">
-                    <p>Snelle en kosteneffectieve oplossing voor kleine deukjes en krassen zonder volledige herspuiting.</p>
+                    <p>Een gedeukte of gekraste vleugel? Wij herstellen spatborden tot in de perfectie. Door onze geavanceerde uitdeuktechnieken en computergestuurde kleurmeting ziet u geen enkel verschil met de originele staat. Sneller en goedkoper dan een volledig nieuw onderdeel.</p>
                 </div>
             </div>
         </div>
@@ -603,14 +621,17 @@
     </div>
 
     <section class="slider-section">
-        <h2 class="slider-title">Onze Realisaties</h2>
+        <h2 class="slider-title">Vakmanschap in Actie</h2>
         <div class="slider-container">
             <div class="slider-track" id="sliderTrack">
                 <!-- 10 photos -->
-                <div class="slide"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=600" alt="Carrosserie herstel BMW Brussel" loading="lazy"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=600" alt="Auto spuiten prijs Brussel" loading="lazy"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=600" alt="Takeldienst Brussel 24/7" loading="lazy"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&q=80&w=600" alt="Schadeherstel expert Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&q=80&w=600" alt="Vakman spuitcabine Auto M50 Brussel" loading="lazy"></div>
+                <div class="slide">
+                    <div class="badge">99% kleurmatch gegarandeerd</div>
+                    <img src="https://images.unsplash.com/photo-1635773054018-209224016149?auto=format&fit=crop&q=80&w=600" alt="Vleugel herstel en uitdeuken Brussel" loading="lazy">
+                </div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1517524008436-bbdb53c54434?auto=format&fit=crop&q=80&w=600" alt="Polieren van carrosserie na herstel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&q=80&w=600" alt="Technieker werkt aan chassis Brussel" loading="lazy"></div>
                 <div class="slide"><img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=600" alt="Smart Repair Brussel" loading="lazy"></div>
                 <div class="slide"><img src="https://images.unsplash.com/photo-1542362567-b05503f3f5f4?auto=format&fit=crop&q=80&w=600" alt="Koplamp polijsten Brussel" loading="lazy"></div>
                 <div class="slide"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=600" alt="Lakherstel Mercedes Brussel" loading="lazy"></div>
