@@ -815,7 +815,7 @@
                     <p>BTW: BE 0849.826.403</p>
                 </div>
             </div>
-            <form class="contact-form" id="contact-form" novalidate action="https://formspree.io/f/placeholder" method="POST">
+            <form class="contact-form" id="contact-form" novalidate>
                 <div class="form-group">
                     <label for="naam">Naam</label>
                     <input type="text" id="naam" name="naam" placeholder="Uw naam" required>
@@ -983,8 +983,15 @@
                 });
             });
 
-            contactForm.addEventListener('submit', (e) => {
+            contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                const naam = document.getElementById('naam').value.trim();
+                const achternaam = document.getElementById('achternaam').value.trim();
+                const mobiel = document.getElementById('mobiel').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const bericht = document.getElementById('bericht').value.trim();
+
                 let isValid = true;
 
                 inputs.forEach(input => {
@@ -1007,9 +1014,37 @@
                     }
                 });
 
-                if (isValid) {
-                    alert("Bedankt! Uw aanvraag voor Auto M50 is verzonden. We nemen binnen 2 uur contact met u op.");
-                    contactForm.reset();
+                if (!isValid) return;
+
+                const btn = contactForm.querySelector('button[type="submit"]');
+                const originalText = btn.innerText;
+                btn.innerText = 'Verzenden...';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('https://cnpdtxmabmkmraauiseh.supabase.co/functions/v1/send-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer sb_publishable_uhfcLXaLLsVDWBOS6PUmQA_OOyBSiE7`
+                        },
+                        body: JSON.stringify({ naam, achternaam, mobiel, email, bericht })
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok && data.success) {
+                        alert('Bedankt! Wij nemen zo snel mogelijk contact met u op.');
+                        contactForm.reset();
+                    } else {
+                        throw new Error(data.error || 'Fout bij verzenden');
+                    }
+                } catch (err) {
+                    console.error('Submission error:', err);
+                    alert('Er is een fout opgetreden. Probeer later opnieuw of contacteer ons direct via WhatsApp.');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
                 }
             });
         }
