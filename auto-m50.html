@@ -29,6 +29,7 @@
 
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: 80px; /* Prevent header overlap */
         }
 
         body {
@@ -108,8 +109,9 @@
             position: relative;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: var(--accent-red);
+            font-weight: bold;
         }
 
         /* Dropdown */
@@ -129,8 +131,14 @@
             display: block;
         }
 
-        .dropdown:hover .dropdown-content {
+        .dropdown:hover .dropdown-content, .dropdown.open .dropdown-content {
             display: block;
+        }
+
+        @media (min-width: 769px) {
+            .dropdown-toggle {
+                pointer-events: none;
+            }
         }
 
         /* HERO SECTION */
@@ -294,13 +302,27 @@
             top: 0;
             left: 0;
             z-index: 1;
-            opacity: 0.3;
+            border-radius: 10px;
+        }
+
+        .flip-card-front::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+            z-index: 2;
             border-radius: 10px;
         }
 
         .flip-card-front h3 {
             position: relative;
-            z-index: 2;
+            z-index: 3;
+            color: var(--primary-grey);
+            font-weight: 800;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
         }
 
         .flip-card-back {
@@ -340,12 +362,15 @@
             width: 100%;
             mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
             -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            /* Fallback for older browsers */
+            background: linear-gradient(to right, white, transparent 10%, transparent 90%, white);
         }
 
         .slider-track {
             display: flex;
             gap: 20px;
             padding: 20px 0;
+            will-change: transform;
         }
 
         .slide {
@@ -354,16 +379,13 @@
             background-color: #ddd;
             border-radius: 8px;
             overflow: hidden;
+            position: relative;
         }
 
         .slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .slide {
-            position: relative;
         }
 
         .badge {
@@ -601,9 +623,9 @@
             <div class="mobile-menu-btn" id="mobile-menu-btn">☰</div>
             <ul class="nav-links" id="nav-links">
                 <div class="close-menu" id="close-menu">✕</div>
-                <li><a href="#">Home</a></li>
-                <li class="dropdown">
-                    <a href="#diensten">Onze Diensten ▾</a>
+                <li><a href="#" class="nav-item">Home</a></li>
+                <li class="dropdown" id="diensten-dropdown">
+                    <a href="#diensten" class="nav-item dropdown-toggle">Onze Diensten ▾</a>
                     <ul class="dropdown-content">
                         <li><a href="#carrosserie">Carrosserieherstel</a></li>
                         <li><a href="#smartrepair">Smart Repair</a></li>
@@ -611,9 +633,9 @@
                         <li><a href="#verzekering">Verzekeringsservice</a></li>
                     </ul>
                 </li>
-                <li><a href="#over-ons">Over Ons</a></li>
-                <li><a href="#takeldienst">Takeldienst</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#over-ons" class="nav-item">Over Ons</a></li>
+                <li><a href="#takeldienst" class="nav-item">Takeldienst</a></li>
+                <li><a href="#contact" class="nav-item">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -716,7 +738,7 @@
         <h3>24/7 Takeldienst Brussel – Binnen 30 min ter plaatse in Laken, Jette, Schaarbeek & Centrum.</h3>
         <p>24/7 Depannage - Snelle Interventie in heel de regio Brussel!</p>
         <p>Autopech of ongeval? Wij staan direct voor u klaar.</p>
-        <a href="tel:+3200000000" class="btn btn-white">BEL NU: +32 000 00 00</a>
+        <a href="tel:+32486789012" class="btn btn-white">BEL NU: +32 486 78 90 12</a>
     </section>
 
     <section id="contact" class="contact-section">
@@ -746,7 +768,7 @@
                     <p>BTW: BE 0849.826.403</p>
                 </div>
             </div>
-            <form class="contact-form" id="contact-form">
+            <form class="contact-form" id="contact-form" novalidate>
                 <div class="form-group">
                     <label>Naam</label>
                     <input type="text" id="naam" placeholder="Uw naam">
@@ -808,77 +830,166 @@
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const closeMenu = document.getElementById('close-menu');
         const navLinks = document.getElementById('nav-links');
+        const dienstenDropdown = document.getElementById('diensten-dropdown');
 
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.add('active');
-        });
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.add('active');
+            });
+        }
 
-        closeMenu.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-        });
+        if (closeMenu) {
+            closeMenu.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        }
+
+        // Toggle dropdown on mobile
+        if (dienstenDropdown) {
+            dienstenDropdown.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.stopPropagation();
+                    dienstenDropdown.classList.toggle('open');
+                }
+            });
+        }
 
         // Close menu when clicking a link
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
+                if (dienstenDropdown) dienstenDropdown.classList.remove('open');
             });
         });
+
+        // ACTIVE LINK HIGHLIGHTER (Intersection Observer)
+        const sections = document.querySelectorAll('section, .flip-matrix');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: "-80px 0px 0px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id') || "";
+                    navItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.getAttribute('href') === `#${id}` || (id === "" && item.getAttribute('href') === "#")) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
 
         // FORM VALIDATION LOGIC
         const contactForm = document.getElementById('contact-form');
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const inputs = contactForm.querySelectorAll('input, textarea');
-            let isValid = true;
 
+        const validateEmail = (email) => {
+            return String(email)
+                .toLowerCase()
+                .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+        };
+
+        if (contactForm) {
+            const inputs = contactForm.querySelectorAll('input, textarea');
+
+            // Real-time error removal
             inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    input.classList.add('input-error');
-                    isValid = false;
-                } else {
-                    input.classList.remove('input-error');
-                }
+                input.addEventListener('input', () => {
+                    if (input.value.trim()) {
+                        input.classList.remove('input-error');
+                    }
+                });
             });
 
-            if (isValid) {
-                alert("Bedankt! Uw aanvraag voor Auto M50 is verzonden. We nemen binnen 2 uur contact met u op.");
-                contactForm.reset();
-            }
-        });
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    const value = input.value.trim();
+                    let fieldValid = true;
+
+                    if (!value) {
+                        fieldValid = false;
+                    } else if (input.type === 'email' && !validateEmail(value)) {
+                        fieldValid = false;
+                    }
+
+                    if (!fieldValid) {
+                        input.classList.add('input-error');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('input-error');
+                    }
+                });
+
+                if (isValid) {
+                    alert("Bedankt! Uw aanvraag voor Auto M50 is verzonden. We nemen binnen 2 uur contact met u op.");
+                    contactForm.reset();
+                }
+            });
+        }
 
         /**
          * INFINITE PHOTO SLIDER LOGIC
-         *
-         * De slider werkt door de track continu naar links te verschuiven.
          */
         const track = document.getElementById('sliderTrack');
-        const slides = Array.from(track.children);
+        let slides = Array.from(track.children);
+        const originalCount = slides.length;
 
-        // Kloon de slides om een soepele overgang te garanderen
+        // Clone for infinite loop
         slides.forEach(slide => {
             const clone = slide.cloneNode(true);
             track.appendChild(clone);
         });
 
         let scrollAmount = 0;
-        const speed = 1;
+        const speedPerSecond = 50; // Pixels per second
+        let lastTimestamp = 0;
+        let isVisible = true;
 
-        function step() {
-            scrollAmount -= speed;
+        function updateSlider(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const delta = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
 
-            // Bereken de breedte dynamisch voor responsiveness
-            const firstSlideWidth = slides[0].offsetWidth + 20;
-            const totalOriginalWidth = firstSlideWidth * slides.length;
+            if (isVisible && track) {
+                scrollAmount -= speedPerSecond * delta;
 
-            if (Math.abs(scrollAmount) >= totalOriginalWidth) {
-                scrollAmount = 0;
+                const gap = 20;
+                const firstSlideWidth = slides[0].offsetWidth + gap;
+                const totalOriginalWidth = firstSlideWidth * originalCount;
+
+                if (Math.abs(scrollAmount) >= totalOriginalWidth) {
+                    scrollAmount += totalOriginalWidth;
+                }
+
+                track.style.transform = `translateX(${scrollAmount}px)`;
             }
-
-            track.style.transform = `translateX(${scrollAmount}px)`;
-            requestAnimationFrame(step);
+            requestAnimationFrame(updateSlider);
         }
 
-        requestAnimationFrame(step);
+        // Visibility API
+        document.addEventListener('visibilitychange', () => {
+            isVisible = !document.hidden;
+            if (isVisible) lastTimestamp = 0; // Reset timestamp to avoid jump
+        });
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            // Recalculate if needed, but the loop reset logic handles dynamic widths in step
+        });
+
+        requestAnimationFrame(updateSlider);
     </script>
 
 </body>
