@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto M50 | Meesterschap in Carrosserieherstel</title>
+    <!--
+        KERN-DOCUMENTATIE & BEVEILIGING
+        NIET WIJZIGEN AAN DE CORE-STRUCTUUR/CSS-GRID: Enkel tekstuele en media-updates toegestaan om layout-integriteit te waarborgen.
+
+        Dit bestand is modulair opgebouwd zodat teksten en afbeeldingen eenvoudig te wijzigen zijn in de HTML-tags.
+    -->
+    <style>
+        :root {
+            --primary-grey: #2C2C2C;
+            --accent-red: #DF0000;
+            --text-white: #FFFFFF;
+            --bg-light: #F4F4F4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--primary-grey);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent-red);
+            color: var(--text-white);
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn:hover {
+            background-color: #b30000;
+        }
+
+        /* HEADER */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-grey);
+            color: var(--text-white);
+            z-index: 1000;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--accent-red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links > li {
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-red);
+        }
+
+        /* Dropdown */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--primary-grey);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            padding-top: 10px;
+        }
+
+        .dropdown-content li a {
+            padding: 12px 16px;
+            display: block;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=1920') no-repeat center center/cover;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            align-items: center;
+            padding: 0 20px;
+            color: var(--text-white);
+            max-width: 100%;
+        }
+
+        .hero-content {
+            grid-column: 2 / 8;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero-content {
+                grid-column: 1 / -1;
+            }
+            .nav-links {
+                display: none; /* Mobile menu would go here */
+            }
+        }
+
+        /* COMMERCIAL GRID */
+        .commercial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .grid-item h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--primary-grey);
+            border-left: 5px solid var(--accent-red);
+            padding-left: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .commercial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* FLIPCARD MATRIX */
+        .flip-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            background-color: var(--primary-grey);
+            padding: 80px 20px;
+            max-width: 100%;
+        }
+
+        .flip-card {
+            perspective: 1000px;
+            height: 300px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .flip-card-front {
+            background-color: var(--text-white);
+            color: var(--primary-grey);
+        }
+
+        .flip-card-front i {
+            font-size: 3rem;
+            color: var(--accent-red);
+            margin-bottom: 15px;
+        }
+
+        .flip-card-back {
+            background-color: var(--accent-red);
+            color: var(--text-white);
+            transform: rotateY(180deg);
+        }
+
+        @media (max-width: 992px) {
+            .flip-matrix {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .flip-matrix {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* PHOTO SLIDER */
+        .slider-section {
+            background-color: var(--text-white);
+            padding: 80px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slider-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2rem;
+        }
+
+        .slider-container {
+            display: flex;
+            width: 100%;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .slider-track {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .slide {
+            flex: 0 0 calc(25% - 15px); /* Exactly 4 photos visible */
+            height: 250px;
+            background-color: #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 992px) {
+            .slide {
+                flex: 0 0 calc(50% - 15px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .slide {
+                flex: 0 0 calc(100% - 15px);
+            }
+        }
+
+        /* TAKELDIENST SECTION */
+        .takeldienst {
+            background-color: var(--accent-red);
+            color: var(--text-white);
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .takeldienst h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .takeldienst p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+
+        .takeldienst .btn-white {
+            background-color: var(--text-white);
+            color: var(--accent-red);
+            padding: 15px 40px;
+            font-size: 1.25rem;
+        }
+
+        /* CONTACT FORM */
+        .contact-section {
+            background-color: var(--bg-light);
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .contact-form .btn {
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        /* WHATSAPP WIDGET */
+        .whatsapp-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--primary-grey);
+            color: var(--text-white);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            text-align: left;
+        }
+
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container, .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">AUTO <span>M50</span></div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li class="dropdown">
+                    <a href="#diensten">Onze Diensten ▾</a>
+                    <ul class="dropdown-content">
+                        <li><a href="#carrosserie">Carrosserieherstel</a></li>
+                        <li><a href="#smartrepair">Smart Repair</a></li>
+                        <li><a href="#spuitwerk">Spuitwerk</a></li>
+                        <li><a href="#verzekering">Verzekeringsservice</a></li>
+                    </ul>
+                </li>
+                <li><a href="#over-ons">Over Ons</a></li>
+                <li><a href="#takeldienst">Takeldienst</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Auto M50: Meesterschap in Carrosserieherstel & Esthetische Perfectie.</h1>
+            <p>Uw wagen terug in showroomstaat met de precisie van een expert.</p>
+            <a href="#contact" class="btn">Maak een afspraak</a>
+        </div>
+    </section>
+
+    <section id="over-ons" class="commercial-grid">
+        <div class="grid-item">
+            <h2>Technische Superioriteit</h2>
+            <p>Bij Auto M50 gebruiken we uitsluitend de meest geavanceerde richtbanken en digitale lakmeting-technologie. Elke herstelling wordt uitgevoerd volgens de strikte fabrieksnormen, waarbij we tot op de micrometer nauwkeurig te werk gaan om de structurele integriteit van uw voertuig te garanderen.</p>
+        </div>
+        <div class="grid-item">
+            <h2>Onze Passie: De M-Standaard</h2>
+            <p>Vernoemd naar de ultieme prestatie-afdeling, streven wij bij Auto M50 naar niets minder dan de 'M-standaard'. Onze liefde voor vakmanschap vertaalt zich in elk detail van het herstelproces. Wij behandelen elke wagen alsof het ons eigen pronkstuk is, met oog voor esthetiek en duurzaamheid.</p>
+        </div>
+    </section>
+
+    <div id="diensten" class="flip-matrix">
+        <div class="flip-card" id="carrosserie">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <h3>Carrosserieherstel</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Herstel van grote schade met behulp van moderne richttechnieken en originele onderdelen.</p>
+                </div>
+            </div>
+        </div>
+        <div class="flip-card" id="smartrepair">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <h3>Smart Repair</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Snelle en kosteneffectieve oplossing voor kleine deukjes en krassen zonder volledige herspuiting.</p>
+                </div>
+            </div>
+        </div>
+        <div class="flip-card" id="spuitwerk">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <h3>Spuitwerk</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Computergestuurde kleurmeting voor een onzichtbare overgang en perfecte glans.</p>
+                </div>
+            </div>
+        </div>
+        <div class="flip-card" id="verzekering">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <h3>Verzekeringsservice</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Volledige administratieve afhandeling met uw verzekeringsmaatschappij voor een zorgeloze ervaring.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="slider-section">
+        <h2 class="slider-title">Onze Realisaties</h2>
+        <div class="slider-container">
+            <div class="slider-track" id="sliderTrack">
+                <!-- 10 photos -->
+                <div class="slide"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 1"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 2"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 3"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 4"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 5"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1542362567-b05503f3f5f4?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 6"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 7"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 8"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf048?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 9"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1493238555221-d2aa1f247395?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 10"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="takeldienst" class="takeldienst">
+        <h2>Takeldienst Brussel</h2>
+        <p>24/7 Depannage - Snelle Interventie in heel de regio Brussel!</p>
+        <p>Autopech of ongeval? Wij staan direct voor u klaar.</p>
+        <a href="tel:+3200000000" class="btn btn-white">BEL NU: +32 000 00 00</a>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Neem contact op</h2>
+                <p>Heeft u schade aan uw wagen of wilt u een offerte voor spuitwerk? Vul het formulier in en wij nemen binnen de 24 uur contact met u op.</p>
+                <br>
+                <p><strong>Auto M50</strong></p>
+                <p>Chau. d'Anvers 393, 1000 Bruxelles</p>
+                <p>BTW: BE 0849.826.403</p>
+            </div>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label>Naam</label>
+                    <input type="text" placeholder="Uw naam" required>
+                </div>
+                <div class="form-group">
+                    <label>Achternaam</label>
+                    <input type="text" placeholder="Uw achternaam" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobiel</label>
+                    <input type="tel" placeholder="Uw telefoonnummer" required>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" placeholder="Uw e-mailadres" required>
+                </div>
+                <div class="form-group">
+                    <label>Bericht</label>
+                    <textarea rows="5" placeholder="Beschrijf uw vraag of de schade..."></textarea>
+                </div>
+                <button type="submit" class="btn">VERZEND AANVRAAG</button>
+            </form>
+        </div>
+    </section>
+
+    <a href="https://wa.me/32000000000" class="whatsapp-widget" target="_blank">
+        <i>W</i>
+    </a>
+
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h3>Auto M50</h3>
+                <p>Uw expert in carrosserieherstel en esthetische perfectie in Brussel.</p>
+            </div>
+            <div>
+                <h3>Snelkoppelingen</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#diensten">Diensten</a></li>
+                    <li><a href="#over-ons">Over Ons</a></li>
+                    <li><a href="#takeldienst">Takeldienst</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Contact</h3>
+                <p>Chau. d'Anvers 393</p>
+                <p>1000 Bruxelles</p>
+                <p>BE 0849.826.403</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 Auto M50. Alle rechten voorbehouden.
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * INFINITE PHOTO SLIDER LOGIC
+         *
+         * De slider werkt door de track continu naar links te verschuiven.
+         * Wanneer een slide volledig uit beeld is, wordt deze naar het einde van de track verplaatst.
+         * Dit creëert een naadloze, oneindige loop.
+         */
+        const track = document.getElementById('sliderTrack');
+        const slides = Array.from(track.children);
+
+        // Kloon de slides om een soepele overgang te garanderen bij het begin
+        slides.forEach(slide => {
+            const clone = slide.cloneNode(true);
+            track.appendChild(clone);
+        });
+
+        let scrollAmount = 0;
+        const speed = 1; // Aanpasbare snelheid
+
+        function step() {
+            scrollAmount -= speed;
+
+            // Als de helft van de track (de originele set slides) voorbij is, reset naar 0
+            // De breedte van één slide + gap (20px)
+            const firstSlideWidth = slides[0].offsetWidth + 20;
+            const totalOriginalWidth = firstSlideWidth * slides.length;
+
+            if (Math.abs(scrollAmount) >= totalOriginalWidth) {
+                scrollAmount = 0;
+            }
+
+            track.style.transform = `translateX(${scrollAmount}px)`;
+            requestAnimationFrame(step);
+        }
+
+        // Start de animatie
+        requestAnimationFrame(step);
+
+        // Pauzeer op hover
+        track.addEventListener('mouseenter', () => {
+            // Logica voor pauzeren kan hier worden toegevoegd indien gewenst
+        });
+    </script>
+
+</body>
+</html>
