@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto M50 | Carrosserie & Takeldienst Brussel | Onzichtbaar Schadeherstel</title>
     <meta name="description" content="Auto M50 is uw specialist in Brussel voor carrosserie, spuitwerk en 24/7 takeldienst. Erkend schadeherstel met levenslange garantie op lakwerk. Bel nu!">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!--
         KERN-DOCUMENTATIE & BEVEILIGING
         NIET WIJZIGEN AAN DE CORE-STRUCTUUR/CSS-GRID: Enkel tekstuele en media-updates toegestaan om layout-integriteit te waarborgen.
@@ -494,6 +495,71 @@
             border: 2px solid var(--accent-red) !important;
         }
 
+        /* NEW COMPONENTS */
+        .founder-quote {
+            grid-column: 1 / -1;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: white;
+            border-left: 5px solid var(--accent-red);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .founder-quote p {
+            font-size: 1.25rem;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .founder-quote span {
+            font-weight: bold;
+            color: var(--accent-red);
+            font-style: normal;
+        }
+
+        .whatsapp-quote-box {
+            background-color: rgba(37, 211, 102, 0.1);
+            border: 1px solid #25D366;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-quote-box:hover {
+            background-color: #25D366;
+            color: white !important;
+        }
+
+        .whatsapp-quote-box:hover * {
+            color: white !important;
+        }
+
+        .whatsapp-quote-box i {
+            font-size: 2.5rem;
+            color: #25D366;
+        }
+
+        .price-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--primary-grey);
+            margin-top: 15px;
+        }
+
+        .price-badge i {
+            color: var(--accent-red);
+        }
+
         /* FOOTER */
         footer {
             background-color: var(--primary-grey);
@@ -570,6 +636,10 @@
             <img src="https://images.unsplash.com/photo-1484133119125-82d7d97375f2?auto=format&fit=crop&q=80&w=800" alt="Passie voor auto herstel M-Standaard" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;" loading="lazy">
             <h2>Onze Passie: De M-Standaard</h2>
             <p>Vernoemd naar de ultieme prestatie-afdeling, streven wij bij Auto M50 naar niets minder dan de 'M-standaard'. Onze liefde voor vakmanschap vertaalt zich in elk detail van het herstelproces. Wij behandelen elke wagen alsof het ons eigen pronkstuk is, met oog voor esthetiek en duurzaamheid.</p>
+        </div>
+        <div class="founder-quote">
+            <p>"Carrosserie is voor mij geen werk, het is een passie die ik al sinds mijn tijd op de leerbanken koester. Elke wagen die onze werkplaats verlaat, draagt mijn persoonlijke stempel van perfectie. Wij combineren dat ouderwetse vakmanschap met de scherpste prijzen van Brussel, simpelweg omdat we houden van wat we doen."</p>
+            <span>— De Oprichter, Auto M50</span>
         </div>
     </section>
 
@@ -652,12 +722,29 @@
     <section id="contact" class="contact-section">
         <div class="contact-container">
             <div class="contact-info">
-                <h2>Neem contact op</h2>
-                <p>Heeft u schade aan uw wagen of wilt u een offerte voor spuitwerk? Vul het formulier in en wij nemen binnen de 24 uur contact met u op.</p>
-                <br>
-                <p><strong>Auto M50</strong></p>
-                <p>Chau. d'Anvers 393, 1000 Bruxelles</p>
-                <p>BTW: BE 0849.826.403</p>
+                <h2 style="color: var(--accent-red); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Contact & Offerte</h2>
+                <h3 style="font-size: 2.5rem; margin-bottom: 20px; line-height: 1.2;">Snel een prijs weten?</h3>
+                <p>Geen tijd om langs te komen? <br>
+                <strong>Stuur ons simpelweg foto's van de schade via WhatsApp en ontvang direct een vrijblijvende offerte op maat.</strong></p>
+
+                <a href="https://wa.me/32486789012" class="whatsapp-quote-box">
+                    <i class="fab fa-whatsapp"></i>
+                    <div>
+                        <h4 style="font-weight: bold; font-size: 1.1rem;">Direct Offerte via WhatsApp</h4>
+                        <p style="font-size: 0.85rem; opacity: 0.8;">Stuur foto's naar +32 486 78 90 12</p>
+                    </div>
+                </a>
+
+                <div class="price-badge">
+                    <i class="fas fa-tags"></i>
+                    <span>Scherpste tarieven voor Premium Vakmanschap</span>
+                </div>
+
+                <div style="margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px;">
+                    <p><strong>Auto M50</strong></p>
+                    <p>Chau. d'Anvers 393, 1000 Bruxelles</p>
+                    <p>BTW: BE 0849.826.403</p>
+                </div>
             </div>
             <form class="contact-form" id="contact-form">
                 <div class="form-group">
@@ -685,8 +772,8 @@
         </div>
     </section>
 
-    <a href="https://wa.me/32000000000" class="whatsapp-widget" target="_blank">
-        <i>W</i>
+    <a href="https://wa.me/32486789012" class="whatsapp-widget" target="_blank">
+        <i class="fab fa-whatsapp"></i>
     </a>
 
     <footer>
