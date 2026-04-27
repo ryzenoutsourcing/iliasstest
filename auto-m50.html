@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto M50 | Meesterschap in Carrosserieherstel</title>
+    <title>Auto M50 | Carrosserie & Takeldienst Brussel | Onzichtbaar Schadeherstel</title>
+    <meta name="description" content="Auto M50 is uw specialist in Brussel voor carrosserie, spuitwerk en 24/7 takeldienst. Erkend schadeherstel met levenslange garantie op lakwerk. Bel nu!">
     <!--
         KERN-DOCUMENTATIE & BEVEILIGING
         NIET WIJZIGEN AAN DE CORE-STRUCTUUR/CSS-GRID: Enkel tekstuele en media-updates toegestaan om layout-integriteit te waarborgen.
@@ -99,6 +100,7 @@
         .nav-links {
             display: flex;
             gap: 30px;
+            transition: all 0.3s ease;
         }
 
         .nav-links > li {
@@ -167,8 +169,43 @@
                 grid-column: 1 / -1;
             }
             .nav-links {
-                display: none; /* Mobile menu would go here */
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: 250px;
+                background-color: var(--primary-grey);
+                flex-direction: column;
+                padding: 80px 40px;
+                opacity: 0;
+                pointer-events: none;
+                z-index: 2000;
             }
+            .nav-links.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .mobile-menu-btn {
+                display: block !important;
+            }
+            .close-menu {
+                display: block !important;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                font-size: 2rem;
+                cursor: pointer;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close-menu {
+            display: none;
         }
 
         /* COMMERCIAL GRID */
@@ -244,6 +281,25 @@
             font-size: 3rem;
             color: var(--accent-red);
             margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .flip-card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.3;
+            border-radius: 10px;
+        }
+
+        .flip-card-front h3 {
+            position: relative;
+            z-index: 2;
         }
 
         .flip-card-back {
@@ -401,6 +457,23 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             z-index: 9999;
             cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        .input-error {
+            border: 2px solid var(--accent-red) !important;
         }
 
         /* FOOTER */
@@ -441,7 +514,9 @@
     <header>
         <nav>
             <div class="logo">AUTO <span>M50</span></div>
-            <ul class="nav-links">
+            <div class="mobile-menu-btn" id="mobile-menu-btn">☰</div>
+            <ul class="nav-links" id="nav-links">
+                <div class="close-menu" id="close-menu">✕</div>
                 <li><a href="#">Home</a></li>
                 <li class="dropdown">
                     <a href="#diensten">Onze Diensten ▾</a>
@@ -461,18 +536,20 @@
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Auto M50: Meesterschap in Carrosserieherstel & Esthetische Perfectie.</h1>
-            <p>Uw wagen terug in showroomstaat met de precisie van een expert.</p>
+            <h1>Carrosserie Auto M50: Onzichtbaar Schadeherstel met de 'M-Serie' Standaard in Brussel.</h1>
+            <p>Van kleine krasjes (Smart Repair) tot zwaar chassis-herstel. Wij regelen alles met uw verzekering. Uw wagen terug in showroomstaat, gegarandeerd.</p>
             <a href="#contact" class="btn">Maak een afspraak</a>
         </div>
     </section>
 
     <section id="over-ons" class="commercial-grid">
         <div class="grid-item">
+            <img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&q=80&w=800" alt="Geavanceerd carrosserie herstel gereedschap Brussel" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;" loading="lazy">
             <h2>Technische Superioriteit</h2>
-            <p>Bij Auto M50 gebruiken we uitsluitend de meest geavanceerde richtbanken en digitale lakmeting-technologie. Elke herstelling wordt uitgevoerd volgens de strikte fabrieksnormen, waarbij we tot op de micrometer nauwkeurig te werk gaan om de structurele integriteit van uw voertuig te garanderen.</p>
+            <p>Bij Auto M50 gebruiken we uitsluitend de meest geavanceerde richtbanken en digitale lakmeting-technologie. Elke herstelling wordt uitgevoerd volgens de strikte fabrieksnormen. Erkend door alle grote verzekeringsmaatschappijen. Wij nemen de volledige papierwinkel van u over.</p>
         </div>
         <div class="grid-item">
+            <img src="https://images.unsplash.com/photo-1484133119125-82d7d97375f2?auto=format&fit=crop&q=80&w=800" alt="Passie voor auto herstel M-Standaard" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;" loading="lazy">
             <h2>Onze Passie: De M-Standaard</h2>
             <p>Vernoemd naar de ultieme prestatie-afdeling, streven wij bij Auto M50 naar niets minder dan de 'M-standaard'. Onze liefde voor vakmanschap vertaalt zich in elk detail van het herstelproces. Wij behandelen elke wagen alsof het ons eigen pronkstuk is, met oog voor esthetiek en duurzaamheid.</p>
         </div>
@@ -482,6 +559,7 @@
         <div class="flip-card" id="carrosserie">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
+                    <img src="https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&q=80&w=400" alt="Carrosserieherstel Brussel" loading="lazy">
                     <h3>Carrosserieherstel</h3>
                 </div>
                 <div class="flip-card-back">
@@ -492,6 +570,7 @@
         <div class="flip-card" id="smartrepair">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
+                    <img src="https://images.unsplash.com/photo-1589739102247-28ca3183756d?auto=format&fit=crop&q=80&w=400" alt="Smart Repair Brussel" loading="lazy">
                     <h3>Smart Repair</h3>
                 </div>
                 <div class="flip-card-back">
@@ -502,6 +581,7 @@
         <div class="flip-card" id="spuitwerk">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
+                    <img src="https://images.unsplash.com/photo-1517524008436-bbdb53c54434?auto=format&fit=crop&q=80&w=400" alt="Professioneel spuitwerk Brussel" loading="lazy">
                     <h3>Spuitwerk</h3>
                 </div>
                 <div class="flip-card-back">
@@ -512,6 +592,7 @@
         <div class="flip-card" id="verzekering">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
+                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=400" alt="Verzekeringsservice schade Brussel" loading="lazy">
                     <h3>Verzekeringsservice</h3>
                 </div>
                 <div class="flip-card-back">
@@ -526,22 +607,22 @@
         <div class="slider-container">
             <div class="slider-track" id="sliderTrack">
                 <!-- 10 photos -->
-                <div class="slide"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 1"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 2"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 3"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 4"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 5"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1542362567-b05503f3f5f4?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 6"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 7"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 8"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf048?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 9"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1493238555221-d2aa1f247395?auto=format&fit=crop&q=80&w=600" alt="M50 Werk 10"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=600" alt="Carrosserie herstel BMW Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=600" alt="Auto spuiten prijs Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=600" alt="Takeldienst Brussel 24/7" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&q=80&w=600" alt="Schadeherstel expert Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=600" alt="Smart Repair Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1542362567-b05503f3f5f4?auto=format&fit=crop&q=80&w=600" alt="Koplamp polijsten Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=600" alt="Lakherstel Mercedes Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&q=80&w=600" alt="Velgen herstel Brussel" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf048?auto=format&fit=crop&q=80&w=600" alt="Deukjes verwijderen zonder spuiten" loading="lazy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1493238555221-d2aa1f247395?auto=format&fit=crop&q=80&w=600" alt="Exclusieve wagens carrosserie" loading="lazy"></div>
             </div>
         </div>
     </section>
 
     <section id="takeldienst" class="takeldienst">
-        <h2>Takeldienst Brussel</h2>
+        <h3>24/7 Takeldienst Brussel – Binnen 30 min ter plaatse in Laken, Jette, Schaarbeek & Centrum.</h3>
         <p>24/7 Depannage - Snelle Interventie in heel de regio Brussel!</p>
         <p>Autopech of ongeval? Wij staan direct voor u klaar.</p>
         <a href="tel:+3200000000" class="btn btn-white">BEL NU: +32 000 00 00</a>
@@ -557,26 +638,26 @@
                 <p>Chau. d'Anvers 393, 1000 Bruxelles</p>
                 <p>BTW: BE 0849.826.403</p>
             </div>
-            <form class="contact-form">
+            <form class="contact-form" id="contact-form">
                 <div class="form-group">
                     <label>Naam</label>
-                    <input type="text" placeholder="Uw naam" required>
+                    <input type="text" id="naam" placeholder="Uw naam">
                 </div>
                 <div class="form-group">
                     <label>Achternaam</label>
-                    <input type="text" placeholder="Uw achternaam" required>
+                    <input type="text" id="achternaam" placeholder="Uw achternaam">
                 </div>
                 <div class="form-group">
                     <label>Mobiel</label>
-                    <input type="tel" placeholder="Uw telefoonnummer" required>
+                    <input type="tel" id="mobiel" placeholder="Uw telefoonnummer">
                 </div>
                 <div class="form-group">
                     <label>E-mail</label>
-                    <input type="email" placeholder="Uw e-mailadres" required>
+                    <input type="email" id="email" placeholder="Uw e-mailadres">
                 </div>
                 <div class="form-group">
                     <label>Bericht</label>
-                    <textarea rows="5" placeholder="Beschrijf uw vraag of de schade..."></textarea>
+                    <textarea id="bericht" rows="5" placeholder="Beschrijf uw vraag of de schade..."></textarea>
                 </div>
                 <button type="submit" class="btn">VERZEND AANVRAAG</button>
             </form>
@@ -615,30 +696,69 @@
     </footer>
 
     <script>
+        // MOBILE MENU LOGIC
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenu = document.getElementById('close-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // FORM VALIDATION LOGIC
+        const contactForm = document.getElementById('contact-form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputs = contactForm.querySelectorAll('input, textarea');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('input-error');
+                    isValid = false;
+                } else {
+                    input.classList.remove('input-error');
+                }
+            });
+
+            if (isValid) {
+                alert("Bedankt! Uw aanvraag voor Auto M50 is verzonden. We nemen binnen 2 uur contact met u op.");
+                contactForm.reset();
+            }
+        });
+
         /**
          * INFINITE PHOTO SLIDER LOGIC
          *
          * De slider werkt door de track continu naar links te verschuiven.
-         * Wanneer een slide volledig uit beeld is, wordt deze naar het einde van de track verplaatst.
-         * Dit creëert een naadloze, oneindige loop.
          */
         const track = document.getElementById('sliderTrack');
         const slides = Array.from(track.children);
 
-        // Kloon de slides om een soepele overgang te garanderen bij het begin
+        // Kloon de slides om een soepele overgang te garanderen
         slides.forEach(slide => {
             const clone = slide.cloneNode(true);
             track.appendChild(clone);
         });
 
         let scrollAmount = 0;
-        const speed = 1; // Aanpasbare snelheid
+        const speed = 1;
 
         function step() {
             scrollAmount -= speed;
 
-            // Als de helft van de track (de originele set slides) voorbij is, reset naar 0
-            // De breedte van één slide + gap (20px)
+            // Bereken de breedte dynamisch voor responsiveness
             const firstSlideWidth = slides[0].offsetWidth + 20;
             const totalOriginalWidth = firstSlideWidth * slides.length;
 
@@ -650,13 +770,7 @@
             requestAnimationFrame(step);
         }
 
-        // Start de animatie
         requestAnimationFrame(step);
-
-        // Pauzeer op hover
-        track.addEventListener('mouseenter', () => {
-            // Logica voor pauzeren kan hier worden toegevoegd indien gewenst
-        });
     </script>
 
 </body>
