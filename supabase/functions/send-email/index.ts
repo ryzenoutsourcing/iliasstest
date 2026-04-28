@@ -2,8 +2,8 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const TO_EMAIL = Deno.env.get('TO_EMAIL')        // zet op: ryzenoutsourcing@gmail.com
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL')    // bijv. noreply@jouwdomein.be of onboarding@resend.dev
+const TO_EMAIL = Deno.env.get('TO_EMAIL')        // ryzenoutsourcing@gmail.com
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL')    // e.g. onboarding@resend.dev
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!
 
@@ -37,7 +37,7 @@ serve(async (req) => {
 
     if (insertError) console.error('Database insert error:', insertError)
 
-    // 2. E-mail versturen via Resend (gratis)
+    // 2. E-mail versturen via Resend
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
