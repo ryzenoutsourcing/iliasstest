@@ -1,0 +1,8 @@
+project_id = "cnpdtxmabmkmraauiseh"
+
+[api]
+port = 54321
+external_url = "https://cnpdtxmabmkmraauiseh.supabase.co"
+
+[functions.send-email]
+verify_jwt = false
