@@ -6,10 +6,10 @@
     <title>Auto M50 | Carrosserie & Takeldienst Brussel | Onzichtbaar Schadeherstel</title>
     <meta name="description" content="Auto M50 is uw specialist in Brussel voor carrosserie, spuitwerk en 24/7 takeldienst. Erkend schadeherstel met levenslange garantie op lakwerk. Bel nu!">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!--
+    <!-- 
         KERN-DOCUMENTATIE & BEVEILIGING
         NIET WIJZIGEN AAN DE CORE-STRUCTUUR/CSS-GRID: Enkel tekstuele en media-updates toegestaan om layout-integriteit te waarborgen.
-
+        
         Dit bestand is modulair opgebouwd zodat teksten en afbeeldingen eenvoudig te wijzigen zijn in de HTML-tags.
     -->
     <style>
@@ -794,7 +794,7 @@
                 <h3 class="contact-info-title">Snel een prijs weten?</h3>
                 <p>Geen tijd om langs te komen? <br>
                 <strong>Stuur ons simpelweg foto's van de schade via WhatsApp en ontvang direct een vrijblijvende offerte op maat.</strong></p>
-
+                
                 <a href="https://wa.me/32486789012" class="whatsapp-quote-box">
                     <i class="fab fa-whatsapp"></i>
                     <div>
@@ -873,52 +873,128 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // MOBILE MENU LOGIC
+        /**
+         * 1. SUPABASE CONFIGURATIE
+         */
+        const SUPABASE_URL = 'https://cnpdtxmabmkmraauiseh.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_uhfcLXaLLsVDWBOS6PUmQA_OOyBSiE7';
+        
+        // Gebruik window.supabase om conflict met de librarynaam te voorkomen
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        /**
+         * 2. MOBILE MENU & NAVIGATION LOGIC
+         */
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const closeMenu = document.getElementById('close-menu');
         const navLinks = document.getElementById('nav-links');
         const dienstenDropdown = document.getElementById('diensten-dropdown');
 
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', () => {
-                navLinks.classList.add('active');
-            });
-        }
-
-        if (closeMenu) {
-            closeMenu.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                if (dienstenDropdown) dienstenDropdown.classList.remove('open');
-            });
-        }
+        mobileMenuBtn?.addEventListener('click', () => navLinks.classList.add('active'));
+        
+        closeMenu?.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            dienstenDropdown?.classList.remove('open');
+        });
 
         // Toggle dropdown on mobile
-        if (dienstenDropdown) {
-            dienstenDropdown.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768) {
-                    // Only toggle if the click is on the parent link itself
-                    if (e.target.classList.contains('dropdown-toggle')) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        dienstenDropdown.classList.toggle('open');
-                    }
-                }
-            });
-        }
+        dienstenDropdown?.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 && e.target.classList.contains('dropdown-toggle')) {
+                e.preventDefault();
+                e.stopPropagation();
+                dienstenDropdown.classList.toggle('open');
+            }
+        });
 
         // Close menu when clicking a link
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // If it's a sublink, we definitely want to close everything
+        navLinks?.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
                 if (!link.classList.contains('dropdown-toggle')) {
                     navLinks.classList.remove('active');
-                    if (dienstenDropdown) dienstenDropdown.classList.remove('open');
+                    dienstenDropdown?.classList.remove('open');
                 }
             });
         });
 
-        // Flipcard Keyboard/Click Logic
+        // ACTIVE LINK HIGHLIGHTER
+        const observerOptions = { threshold: 0.2, rootMargin: "-80px 0px 0px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                        const href = item.getAttribute('href');
+                        if (href === `#${id}` || (id === "home" && href === "#")) item.classList.add('active');
+                    });
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
+
+        /**
+         * 3. FORMULIER VERZENDEN LOGICA
+         */
+        const contactForm = document.getElementById('contact-form');
+        
+        const validateEmail = (email) => String(email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        const validatePhone = (phone) => /^[\d\s\+\-]{6,20}$/.test(phone);
+
+        if (contactForm) {
+            const inputs = contactForm.querySelectorAll('input, textarea');
+            inputs.forEach(input => input.addEventListener('input', () => input.classList.remove('input-error')));
+
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                let isValid = true;
+                inputs.forEach(input => {
+                    const value = input.value.trim();
+                    let fieldValid = !!value;
+                    if (fieldValid && input.type === 'email' && !validateEmail(value)) fieldValid = false;
+                    if (fieldValid && input.id === 'mobiel' && !validatePhone(value)) fieldValid = false;
+
+                    if (!fieldValid) {
+                        input.classList.add('input-error');
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) return;
+
+                const submitBtn = contactForm.querySelector('button');
+                const originalText = submitBtn.innerText;
+
+                try {
+                    submitBtn.innerText = 'VERZENDEN...';
+                    submitBtn.disabled = true;
+
+                    const formData = new FormData(contactForm);
+                    const data = Object.fromEntries(formData.entries());
+
+                    const { data: responseData, error } = await supabaseClient.functions.invoke('send-email', {
+                        body: data
+                    });
+
+                    if (error) throw error;
+
+                    alert('Bedankt! Wij nemen zo snel mogelijk contact met u op.');
+                    contactForm.reset();
+                } catch (err) {
+                    console.error('Fout:', err);
+                    alert('Er ging iets mis bij het verzenden. Probeer het later opnieuw of contacteer ons via WhatsApp.');
+                } finally {
+                    submitBtn.innerText = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        /**
+         * 4. ACCESSIBILITY & VISUALS
+         */
         document.querySelectorAll('.flip-card').forEach(card => {
             const toggleFlip = () => card.classList.toggle('flipped');
             card.addEventListener('click', toggleFlip);
@@ -930,141 +1006,17 @@
             });
         });
 
-        // ACTIVE LINK HIGHLIGHTER (Intersection Observer)
-        const observerSections = document.querySelectorAll('section[id]');
-        const navItems = document.querySelectorAll('.nav-item');
-
-        const observerOptions = {
-            threshold: 0.2,
-            rootMargin: "-80px 0px 0px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    navItems.forEach(item => {
-                        item.classList.remove('active');
-                        const href = item.getAttribute('href');
-                        if (href === `#${id}` || (id === "home" && href === "#")) {
-                            item.classList.add('active');
-                        }
-                    });
-                }
-            });
-        }, observerOptions);
-
-        observerSections.forEach(section => observer.observe(section));
-
-        // FORM VALIDATION LOGIC
-        const contactForm = document.getElementById('contact-form');
-
-        const validateEmail = (email) => {
-            return String(email)
-                .toLowerCase()
-                .match(
-                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                );
-        };
-
-        const validatePhone = (phone) => {
-            return /^[\d\s\+\-]{6,20}$/.test(phone);
-        };
-
-        if (contactForm) {
-            const inputs = contactForm.querySelectorAll('input, textarea');
-
-            // Real-time error removal
-            inputs.forEach(input => {
-                input.addEventListener('input', () => {
-                    if (input.value.trim()) {
-                        input.classList.remove('input-error');
-                    }
-                });
-            });
-
-            contactForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const naam = document.getElementById('naam').value.trim();
-                const achternaam = document.getElementById('achternaam').value.trim();
-                const mobiel = document.getElementById('mobiel').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const bericht = document.getElementById('bericht').value.trim();
-
-                let isValid = true;
-
-                inputs.forEach(input => {
-                    const value = input.value.trim();
-                    let fieldValid = true;
-
-                    if (!value) {
-                        fieldValid = false;
-                    } else if (input.type === 'email' && !validateEmail(value)) {
-                        fieldValid = false;
-                    } else if (input.id === 'mobiel' && !validatePhone(value)) {
-                        fieldValid = false;
-                    }
-
-                    if (!fieldValid) {
-                        input.classList.add('input-error');
-                        isValid = false;
-                    } else {
-                        input.classList.remove('input-error');
-                    }
-                });
-
-                if (!isValid) return;
-
-                const btn = contactForm.querySelector('button[type="submit"]');
-                const originalText = btn.innerText;
-                btn.innerText = 'Verzenden...';
-                btn.disabled = true;
-
-                try {
-                    const res = await fetch('https://cnpdtxmabmkmraauiseh.supabase.co/functions/v1/send-email', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer sb_publishable_uhfcLXaLLsVDWBOS6PUmQA_OOyBSiE7`
-                        },
-                        body: JSON.stringify({ naam, achternaam, mobiel, email, bericht })
-                    });
-
-                    const data = await res.json();
-
-                    if (res.ok && data.success) {
-                        alert('Bedankt! Wij nemen zo snel mogelijk contact met u op.');
-                        contactForm.reset();
-                    } else {
-                        throw new Error(data.error || 'Fout bij verzenden');
-                    }
-                } catch (err) {
-                    console.error('Submission error:', err);
-                    alert('Er is een fout opgetreden. Probeer later opnieuw of contacteer ons direct via WhatsApp.');
-                } finally {
-                    btn.innerText = originalText;
-                    btn.disabled = false;
-                }
-            });
-        }
-
         /**
-         * INFINITE PHOTO SLIDER LOGIC
+         * 5. INFINITE PHOTO SLIDER LOGIC
          */
         const track = document.getElementById('sliderTrack');
         if (track) {
-            let slides = Array.from(track.children);
-            const originalCount = slides.length;
-
-            // Clone for infinite loop
-            slides.forEach(slide => {
-                const clone = slide.cloneNode(true);
-                track.appendChild(clone);
-            });
+            const originalSlides = Array.from(track.children);
+            const originalCount = originalSlides.length;
+            originalSlides.forEach(slide => track.appendChild(slide.cloneNode(true)));
 
             let scrollAmount = 0;
-            const speedPerSecond = 50; // Pixels per second
+            const speedPerSecond = 50;
             let lastTimestamp = 0;
             let animationFrameId = null;
 
@@ -1074,70 +1026,35 @@
                 lastTimestamp = timestamp;
 
                 scrollAmount -= speedPerSecond * delta;
-
-                const gap = 20;
                 const firstSlide = track.querySelector('.slide');
-                const firstSlideWidth = (firstSlide ? firstSlide.offsetWidth : 0) + gap;
-                const totalOriginalWidth = firstSlideWidth * originalCount;
+                const totalOriginalWidth = ((firstSlide?.offsetWidth || 0) + 20) * originalCount;
 
-                if (totalOriginalWidth > 0 && Math.abs(scrollAmount) >= totalOriginalWidth) {
-                    scrollAmount += totalOriginalWidth;
-                }
+                if (totalOriginalWidth > 0 && Math.abs(scrollAmount) >= totalOriginalWidth) scrollAmount += totalOriginalWidth;
 
                 track.style.transform = `translateX(${scrollAmount}px)`;
                 animationFrameId = requestAnimationFrame(updateSlider);
             }
 
-            function startSlider() {
-                if (!animationFrameId) {
-                    lastTimestamp = 0;
-                    animationFrameId = requestAnimationFrame(updateSlider);
-                }
-            }
+            const startSlider = () => { if (!animationFrameId) { lastTimestamp = 0; animationFrameId = requestAnimationFrame(updateSlider); } };
+            const stopSlider = () => { if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; } };
 
-            function stopSlider() {
-                if (animationFrameId) {
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = null;
-                }
-            }
-
-            // Performance: Stop when not visible (Intersection + Visibility)
             const sliderObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !document.hidden) {
-                        startSlider();
-                    } else {
-                        stopSlider();
-                    }
-                });
+                entries.forEach(entry => entry.isIntersecting && !document.hidden ? startSlider() : stopSlider());
             }, { threshold: 0.1 });
-
             sliderObserver.observe(track.parentElement.parentElement);
 
             document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    stopSlider();
-                } else {
-                    // Start only if it's in the viewport
+                if (document.hidden) stopSlider();
+                else {
                     const rect = track.getBoundingClientRect();
-                    const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
-                    if (inViewport) startSlider();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) startSlider();
                 }
             });
 
-            // Resize handling
             window.addEventListener('resize', () => {
-                const gap = 20;
-                const firstSlide = track.querySelector('.slide');
-                const firstSlideWidth = (firstSlide ? firstSlide.offsetWidth : 0) + gap;
-                const totalOriginalWidth = firstSlideWidth * originalCount;
-                if (totalOriginalWidth > 0 && Math.abs(scrollAmount) >= totalOriginalWidth) {
-                    scrollAmount = 0;
-                }
+                const totalOriginalWidth = ((track.querySelector('.slide')?.offsetWidth || 0) + 20) * originalCount;
+                if (totalOriginalWidth > 0 && Math.abs(scrollAmount) >= totalOriginalWidth) scrollAmount = 0;
             });
-
-            startSlider();
         }
     </script>
 
